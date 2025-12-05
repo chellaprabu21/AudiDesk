@@ -536,15 +536,11 @@
         // ============================================
         
         // ============================================
-        // CONFIGURATION - Update these values!
+        // CONFIGURATION - Google Sheets Integration
         // ============================================
         
-        // Option 1: Formspree (recommended - free, no backend)
-        // Sign up at https://formspree.io and get your form ID
-        const FORMSPREE_ID = 'YOUR_FORMSPREE_ID'; // e.g., 'xpznqwer'
-        
-        // Option 2: Google Sheets (via Google Apps Script)
-        // const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL';
+        // Paste your Google Apps Script Web App URL here:
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzATxjoDCvGHXVo1dkwsr9VTtjXTiO4NB4An0MIK91vfhGvAFBuaMqIJ849PlIR2_rAqw/exec';
         
         // ============================================
         
@@ -564,70 +560,13 @@
                 message.className = 'mt-3 text-sm hidden';
                 
                 try {
-                    // Send to Formspree
-                    const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+                    // Send to Google Sheets via Apps Script
+                    const response = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
+                        mode: 'no-cors', // Required for Google Apps Script
                         headers: {
                             'Content-Type': 'application/json',
-                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({ 
                             email: email,
-                            source: 'AudiDeck Waitlist',
-                            timestamp: new Date().toISOString()
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        // Success
-                        message.textContent = '🎉 You\'re on the list! We\'ll notify you when AudiDeck launches.';
-                        message.className = 'mt-3 text-sm text-deck-accent block';
-                        form.reset();
-                    } else {
-                        throw new Error('Submission failed');
-                    }
-                    
-                } catch (error) {
-                    console.error('Form error:', error);
-                    message.textContent = 'Something went wrong. Please try again.';
-                    message.className = 'mt-3 text-sm text-red-400 block';
-                } finally {
-                    button.disabled = false;
-                    button.innerHTML = originalText;
-                }
-            });
-        }
-        
-        // Initialize both forms
-        handleFormSubmit('waitlist-form', 'form-message');
-        handleFormSubmit('waitlist-form-bottom', 'form-message-bottom');
-        
-        // Smooth reveal on scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-in');
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        document.querySelectorAll('section').forEach(section => {
-            section.style.opacity = '0';
-            section.style.transform = 'translateY(20px)';
-            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(section);
-        });
-        
-        // Add animation class
-        document.head.insertAdjacentHTML('beforeend', `
-            <style>
-                .animate-in {
-                    opacity: 1 !important;
-                    transform: translateY(0) !important;
-                }
-            </style>
-        `);
-    </script>
-</body>
-</html>
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
