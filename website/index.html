@@ -608,22 +608,16 @@
                 message.className = 'mt-3 text-sm hidden';
                 
                 try {
-                    // Build URL with query parameters (most reliable for Google Apps Script)
+                    // Build URL with query parameters
                     const url = new URL(GOOGLE_SCRIPT_URL);
                     url.searchParams.append('email', email);
                     url.searchParams.append('source', 'AudiDeck Waitlist');
                     
-                    // Use Image beacon as fallback (works even with CORS issues)
+                    // Use Image beacon (most reliable for cross-origin)
                     const img = new Image();
                     img.src = url.toString();
                     
-                    // Also try fetch for browsers that support it
-                    fetch(url.toString(), { 
-                        method: 'GET',
-                        mode: 'no-cors'
-                    }).catch(() => {});
-                    
-                    // Show success
+                    // Show success after brief delay
                     setTimeout(() => {
                         message.textContent = '🎉 You\'re on the list! We\'ll notify you when AudiDeck launches.';
                         message.className = 'mt-3 text-sm text-deck-accent block';
