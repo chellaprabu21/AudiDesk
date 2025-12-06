@@ -547,7 +547,7 @@
             const form = document.getElementById(formId);
             const message = document.getElementById(messageId);
             
-            form.addEventListener('submit', async (e) => {
+            form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const email = form.querySelector('input[type="email"]').value;
                 const button = form.querySelector('button[type="submit"]');
@@ -558,16 +558,69 @@
                 button.innerHTML = '<span class="animate-pulse">Joining...</span>';
                 message.className = 'mt-3 text-sm hidden';
                 
-                try {
-                    // Create form data
-                    const formData = new FormData();
-                    formData.append('email', email);
-                    formData.append('source', 'AudiDeck Waitlist');
+                // Create hidden iframe for form submission (bypasses CORS)
+                const iframe = document.createElement('iframe');
+                iframe.name = 'hidden_iframe_' + Date.now();
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+                
+                // Create hidden form
+                const hiddenForm = document.createElement('form');
+                hiddenForm.method = 'POST';
+                hiddenForm.action = GOOGLE_SCRIPT_URL;
+                hiddenForm.target = iframe.name;
+                
+                // Add email field
+                const emailInput = document.createElement('input');
+                emailInput.type = 'hidden';
+                emailInput.name = 'email';
+                emailInput.value = email;
+                hiddenForm.appendChild(emailInput);
+                
+                // Add source field
+                const sourceInput = document.createElement('input');
+                sourceInput.type = 'hidden';
+                sourceInput.name = 'source';
+                sourceInput.value = 'AudiDeck Waitlist';
+                hiddenForm.appendChild(sourceInput);
+                
+                document.body.appendChild(hiddenForm);
+                hiddenForm.submit();
+                
+                // Show success after a short delay
+                setTimeout(() => {
+                    message.textContent = '🎉 You\'re on the list! We\'ll notify you when AudiDeck launches.';
+                    message.className = 'mt-3 text-sm text-deck-accent block';
+                    form.reset();
+                    button.disabled = false;
+                    button.innerHTML = originalText;
                     
-                    // Send to Google Sheets
-                    await fetch(GOOGLE_SCRIPT_URL, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    message.textContent = '🎉 You\'re on the                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                    // Cleanup
+                    document.body.removeChild(hiddenForm);
+                    document.body.removeChild(iframe);
+                }, 1000);
+            });
+        }
+        
+        // Initialize both forms
+        handleFormSubmit('waitlist-form', 'form-message');
+        handleFormSubmit('waitlist-form-bottom', 'form-message-bottom');
+        
+        // Smooth reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+        
+        // Add animation class
+        document.head.insertAdjacentHTML(
