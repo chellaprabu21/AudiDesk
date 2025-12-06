@@ -623,4 +623,15 @@
         });
         
         // Add animation class
-        document.head.insertAdjacentHTML(
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                .animate-in {
+                    opacity: 1 !important;
+                    transform: translateY(0) !important;
+                }
+            </style>
+        `);
+    </script>
+</body>
+</html>
+
