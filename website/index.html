@@ -176,6 +176,59 @@
                 <span class="text-deck-accent font-mono">527+</span> developers, designers & creators already on the waitlist
             </p>
             
+            <!-- MacBook Demo -->
+            <div class="mt-16 relative">
+                <!-- Outer glow -->
+                <div class="absolute -inset-8 bg-gradient-to-r from-deck-accent/15 via-deck-accent2/15 to-deck-accent/15 rounded-[3rem] blur-3xl opacity-60"></div>
+                
+                <!-- MacBook Container -->
+                <div class="relative max-w-4xl mx-auto animate-float">
+                    <!-- Screen Frame -->
+                    <div class="relative bg-gradient-to-b from-[#2d2d2d] via-[#1a1a1a] to-[#0d0d0d] rounded-[1.2rem] p-[3px] shadow-2xl shadow-black/50">
+                        <!-- Inner bezel -->
+                        <div class="bg-[#0a0a0a] rounded-[1.1rem] p-2 pt-5">
+                            <!-- Notch -->
+                            <div class="absolute top-[3px] left-1/2 -translate-x-1/2 w-24 h-5 bg-[#0a0a0a] rounded-b-xl flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-[#1a1a1a] ring-1 ring-[#2a2a2a]"></div>
+                            </div>
+                            
+                            <!-- Screen -->
+                            <div class="relative rounded-lg overflow-hidden ring-1 ring-white/5">
+                                <div class="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none z-10"></div>
+                                <img 
+                                    src="AudioDeckDemo.gif" 
+                                    alt="AudiDeck Demo" 
+                                    class="w-full h-auto"
+                                    loading="lazy"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hinge -->
+                    <div class="relative h-2 mx-3">
+                        <div class="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] rounded-b-lg"></div>
+                        <div class="absolute left-1/2 -translate-x-1/2 top-0 w-16 h-1 bg-[#0a0a0a] rounded-b-full"></div>
+                    </div>
+                    
+                    <!-- Base -->
+                    <div class="relative mx-6 -mt-[1px]">
+                        <div class="h-[5px] bg-gradient-to-b from-[#3a3a3a] via-[#2a2a2a] to-[#1a1a1a] rounded-b-xl"></div>
+                        <div class="absolute inset-x-4 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                    </div>
+                </div>
+                
+                <!-- Surface reflection -->
+                <div class="absolute -bottom-16 left-1/2 -translate-x-1/2 w-2/3 h-16 bg-gradient-to-b from-deck-accent/10 to-transparent blur-2xl opacity-40"></div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="flex items-center justify-center gap-4 mt-16 mb-8">
+                <div class="h-px w-16 bg-gradient-to-r from-transparent to-deck-border"></div>
+                <span class="text-xs text-deck-muted font-mono uppercase tracking-wider">Try it yourself</span>
+                <div class="h-px w-16 bg-gradient-to-l from-transparent to-deck-border"></div>
+            </div>
+            
             <!-- Interactive Kanban Demo -->
             <div class="mt-16 relative">
                 <div class="mockup-card rounded-2xl border border-deck-border p-4 glow-box max-w-3xl mx-auto">
@@ -434,18 +487,15 @@
         let draggedCard = null;
         let sourceColumn = null;
         
-        // Initialize drag and drop
         function initKanban() {
             const cards = document.querySelectorAll('.kanban-card');
             const columns = document.querySelectorAll('.kanban-column');
             
-            // Card drag events
             cards.forEach(card => {
                 card.addEventListener('dragstart', handleDragStart);
                 card.addEventListener('dragend', handleDragEnd);
             });
             
-            // Column drop events
             columns.forEach(column => {
                 column.addEventListener('dragover', handleDragOver);
                 column.addEventListener('dragenter', handleDragEnter);
@@ -482,7 +532,6 @@
         }
         
         function handleDragLeave(e) {
-            // Only remove highlight if we're leaving the column entirely
             if (!this.contains(e.relatedTarget)) {
                 this.classList.remove('border-deck-accent', 'bg-deck-accent/5');
             }
@@ -495,11 +544,7 @@
             if (draggedCard && this !== sourceColumn) {
                 const cardsContainer = this.querySelector('.kanban-cards');
                 cardsContainer.appendChild(draggedCard);
-                
-                // Update counts
                 updateColumnCounts();
-                
-                // Show toast
                 const appName = draggedCard.querySelector('span').textContent;
                 const deviceName = deviceNames[this.dataset.device];
                 showToast(`${appName} → ${deviceName}`);
@@ -517,18 +562,15 @@
         function showToast(message) {
             const toast = document.getElementById('route-toast');
             const toastMessage = document.getElementById('toast-message');
-            
             toastMessage.textContent = message;
             toast.classList.remove('opacity-0');
             toast.classList.add('opacity-100');
-            
             setTimeout(() => {
                 toast.classList.remove('opacity-100');
                 toast.classList.add('opacity-0');
             }, 2000);
         }
         
-        // Initialize Kanban on load
         initKanban();
         
         // ============================================

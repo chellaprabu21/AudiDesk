@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ff88"/>
+      <stop offset="50%" style="stop-color:#00d4ff"/>
+      <stop offset="100%" style="stop-color:#00ff88"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Rounded square background -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="url(#bgGradient)"/>
+  
+  <!-- Audio routing icon -->
+  <!-- Input circle -->
+  <circle cx="128" cy="256" r="40" fill="#0a0a0f"/>
+  
+  <!-- Connection line from input -->
+  <path d="M168 256h48" stroke="#0a0a0f" stroke-width="24" stroke-linecap="round"/>
+  
+  <!-- Split path to top output -->
+  <path d="M216 256c48 0 48-80 112-80h56" stroke="#0a0a0f" stroke-width="24" stroke-linecap="round"/>
+  
+  <!-- Split path to bottom output -->
+  <path d="M216 256c48 0 48 80 112 80h56" stroke="#0a0a0f" stroke-width="24" stroke-linecap="round"/>
+  
+  <!-- Top output circle -->
+  <circle cx="384" cy="176" r="32" fill="#0a0a0f"/>
+  
+  <!-- Bottom output circle -->
+  <circle cx="384" cy="336" r="32" fill="#0a0a0f"/>
+</svg>
+
