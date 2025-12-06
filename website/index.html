@@ -596,7 +596,7 @@
             const form = document.getElementById(formId);
             const message = document.getElementById(messageId);
             
-            form.addEventListener('submit', (e) => {
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = form.querySelector('input[type="email"]').value;
                 const button = form.querySelector('button[type="submit"]');
@@ -607,47 +607,38 @@
                 button.innerHTML = '<span class="animate-pulse">Joining...</span>';
                 message.className = 'mt-3 text-sm hidden';
                 
-                // Create hidden iframe for form submission (bypasses CORS)
-                const iframe = document.createElement('iframe');
-                iframe.name = 'hidden_iframe_' + Date.now();
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-                
-                // Create hidden form
-                const hiddenForm = document.createElement('form');
-                hiddenForm.method = 'POST';
-                hiddenForm.action = GOOGLE_SCRIPT_URL;
-                hiddenForm.target = iframe.name;
-                
-                // Add email field
-                const emailInput = document.createElement('input');
-                emailInput.type = 'hidden';
-                emailInput.name = 'email';
-                emailInput.value = email;
-                hiddenForm.appendChild(emailInput);
-                
-                // Add source field
-                const sourceInput = document.createElement('input');
-                sourceInput.type = 'hidden';
-                sourceInput.name = 'source';
-                sourceInput.value = 'AudiDeck Waitlist';
-                hiddenForm.appendChild(sourceInput);
-                
-                document.body.appendChild(hiddenForm);
-                hiddenForm.submit();
-                
-                // Show success after a short delay
-                setTimeout(() => {
-                    message.textContent = '🎉 You\'re on the list! We\'ll notify you when AudiDeck launches.';
-                    message.className = 'mt-3 text-sm text-deck-accent block';
-                    form.reset();
+                try {
+                    // Build URL with query parameters (most reliable for Google Apps Script)
+                    const url = new URL(GOOGLE_SCRIPT_URL);
+                    url.searchParams.append('email', email);
+                    url.searchParams.append('source', 'AudiDeck Waitlist');
+                    
+                    // Use Image beacon as fallback (works even with CORS issues)
+                    const img = new Image();
+                    img.src = url.toString();
+                    
+                    // Also try fetch for browsers that support it
+                    fetch(url.toString(), { 
+                        method: 'GET',
+                        mode: 'no-cors'
+                    }).catch(() => {});
+                    
+                    // Show success
+                    setTimeout(() => {
+                        message.textContent = '🎉 You\'re on the list! We\'ll notify you when AudiDeck launches.';
+                        message.className = 'mt-3 text-sm text-deck-accent block';
+                        form.reset();
+                        button.disabled = false;
+                        button.innerHTML = originalText;
+                    }, 800);
+                    
+                } catch (error) {
+                    console.error('Form error:', error);
+                    message.textContent = 'Something went wrong. Please try again.';
+                    message.className = 'mt-3 text-sm text-red-400 block';
                     button.disabled = false;
                     button.innerHTML = originalText;
-                    
-                    // Cleanup
-                    document.body.removeChild(hiddenForm);
-                    document.body.removeChild(iframe);
-                }, 1000);
+                }
             });
         }
         
@@ -673,3 +664,14 @@
         
         // Add animation class
         document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                .animate-in {
+                    opacity: 1 !important;
+                    transform: translateY(0) !important;
+                }
+            </style>
+        `);
+    </script>
+</body>
+</html>
+
